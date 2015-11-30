@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:dubbo="http://code.alibabatech.com/schema/dubbo"
+	xsi:schemaLocation="http://code.alibabatech.com/schema/dubbo http://code.alibabatech.com/schema/dubbo/dubbo.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.1.xsd">
+	
+	<!-- 提供方应用信息，用于计算依赖关系 -->
+	<dubbo:application name="dubbo_provider_demo"/>
+	
+	
+ 	<!-- 声明需要暴露的服务的实现 -->
+	<bean id="demoService" class="com.lx.dubbo.demo.service.impl.DemoServiceImpl" />
+	<bean id="rmiService" class="com.lx.dubbo.demo.service.impl.RmiServiceImpl" />
+	<bean id="httpInvokerService" class="com.lx.dubbo.demo.service.impl.HttpInvokerServiceImpl" />
+	<bean id="cxfWebService" class="com.lx.dubbo.demo.service.impl.CxfWebServiceImpl" />
+	
+	
+	<!-- 1、使用multicast广播注册中心暴露服务地址
+	<dubbo:registry address="multicast://224.5.6.7:1234"/> -->
+	
+	<!-- 2、使用zookeeper注册中心暴露服务地址 -->
+	<!-- <dubbo:registry protocol="zookeeper" address="127.0.0.1:2181"/> 或下面方式 -->
+	<dubbo:registry address="zookeeper://127.0.0.1:2181" />
+
+	<!-- 方式1：用dubbo协议在20880端口暴露服务 -->
+<!-- 	<dubbo:protocol name="dubbo" port="20880" /> -->
+	<!-- 声明需要暴露的服务接口 -->
+<!-- 	<dubbo:service interface="com.lx.dubbo.demo.service.DemoService" ref="demoService"/> -->
+	
+    
+    <!-- 方式2：用hessian协议在8080(servlet容器的端口)端口暴露服务，contextpath是项目名称，server这里是使用的web.xml里面配置的servlet -->
+<!--     <dubbo:protocol name="hessian" port="8080" contextpath="provider" server="servlet" /> -->
+    <!-- 声明需要暴露的服务接口，可通过path指定服务访问路径，如：http://localhost:8080/provider/dubbo/dubbo_hessian/demoService，也可以通过标准hessian协议使用该地址进行接口远程调用；
+    	未指定path时，默认为接口全类路径，如：http://localhost:8080/provider/com.lx.dubbo.demo.service.DemoService  -->
+<!--     <dubbo:service interface="com.lx.dubbo.demo.service.DemoService" ref="demoService" path="dubbo/dubbo_hessian/demoService"/> -->
+    
+    
+    <!-- 提供方使用基于 Dubbo 的 RMI 协议发布远程接口服务 -->
+<!-- 	<dubbo:protocol name="rmi" codec="spring" contextpath="provider"/> -->
+<!-- 	<dubbo:protocol name="rmi" port="1099" contextpath="provider"/> -->
+<!-- 	<dubbo:service interface="com.lx.dubbo.demo.service.IRmiService" ref="rmiService" path="dubbo/dubbo_rmi/rmiService"/> -->
+	
+	<!-- 提供方 采用 HTTP 协议发布远程接口服务（采用Spring的HttpInvoker实现） -->
+<!-- 	<dubbo:protocol name="http" port="8080" contextpath="provider" server="servlet"/> -->
+<!-- 	<dubbo:service interface="com.lx.dubbo.demo.service.IHttpInvokerService" ref="httpInvokerService" path="dubbo/dubbo_http/httpInvokerService"/> -->
+	
+	
+	<!-- 用webservice协议在8080端口暴露服务（传输协议：HTTP）;
+		启动 dubbo webservice 服务 提供者 后，可通过浏览器直接访问：http://localhost:8080/provider/dubbo/dubbo_http/webservice/com.lx.dubbo.demo.service.ICxfWebService?wsdl -->
+<!-- 	<dubbo:protocol name="webservice" port="8080" contextpath="provider" server="servlet" /> -->
+	<dubbo:protocol name="webservice" port="8080" server="servlet" />
+	<!-- 声明需要暴露的服务接口 -->
+<!-- 	<dubbo:service interface="com.lx.dubbo.demo.service.ICxfWebService" ref="cxfWebService" path="dubbo/dubbo_http/webservice"/> -->
+	<dubbo:service interface="com.lx.dubbo.demo.service.ICxfWebService" ref="cxfWebService"/>
+	
+</beans>

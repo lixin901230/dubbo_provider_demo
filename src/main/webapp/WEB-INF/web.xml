@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"  
+    xmlns="http://java.sun.com/xml/ns/javaee" xmlns:web="http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"  
+    xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"  
+    id="WebApp_ID" version="2.5">
+
+  	<display-name>dubbo_provider_demo</display-name>
+  
+	<context-param>
+		<param-name>contextConfigLocation</param-name>
+		<param-value>classpath:applicationContext*.xml</param-value>
+	</context-param>
+	<listener>
+		<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+	</listener>
+	
+	<!-- 方式2：dubbo 使用基于Http、Hessian 的远程调用协议进行暴露和远程调用，Hessian底层采用Http通讯，采用Servlet暴露服务（传输协议：HTTP） -->
+	<servlet>
+		<servlet-name>dubbo</servlet-name>
+		<servlet-class>com.alibaba.dubbo.remoting.http.servlet.DispatcherServlet</servlet-class>
+		<load-on-startup>1</load-on-startup>
+	</servlet>
+	<!-- dubbo 基于 hessian 协议远程接口调用接口映射 -->
+	<servlet-mapping>
+		<servlet-name>dubbo</servlet-name>
+		<url-pattern>/dubbo/dubbo_hessian/demoService</url-pattern>
+	</servlet-mapping>
+	<!-- dubbo 基于 http 协议远程接口调用接口映射 -->
+	<servlet-mapping>
+		<servlet-name>dubbo</servlet-name>
+		<url-pattern>/dubbo/dubbo_http/httpInvokerService</url-pattern>
+	</servlet-mapping>
+	<!-- dubbo 基于 WebService 协议远程接口调用接口映射 -->
+	<servlet-mapping>
+		<servlet-name>dubbo</servlet-name>
+		<url-pattern>/dubbo/dubbo_http/webservice/*</url-pattern>
+	</servlet-mapping>
+</web-app>

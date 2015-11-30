@@ -1,0 +1,5 @@
+/.settings/
+/.externalToolBuilders/
+.springBeans
+/target/
+/src/main/webapp/WEB-INF/classes/
