@@ -26,7 +26,7 @@
 	<!-- 方式1：用dubbo协议在20880端口暴露服务 -->
 <!-- 	<dubbo:protocol name="dubbo" port="20880" /> -->
 	<!-- 声明需要暴露的服务接口 -->
-<!-- 	<dubbo:service interface="com.lx.dubbo.demo.service.DemoService" ref="demoService"/> -->
+	<dubbo:service interface="com.lx.dubbo.demo.service.DemoService" ref="demoService"/>
 	
     
     <!-- 方式2：用hessian协议在8080(servlet容器的端口)端口暴露服务，contextpath是项目名称，server这里是使用的web.xml里面配置的servlet -->
@@ -36,10 +36,14 @@
 <!--     <dubbo:service interface="com.lx.dubbo.demo.service.DemoService" ref="demoService" path="dubbo/dubbo_hessian/demoService"/> -->
     
     
-    <!-- 提供方使用基于 Dubbo 的 RMI 协议发布远程接口服务 -->
+    <!-- 提供方使用基于 Dubbo 的 RMI 协议发布远程接口服务
+	    	如果服务接口没有继承java.rmi.Remote接口，
+			缺省Dubbo将自动生成一个com.xxx.XxxService$Remote的接口，并继承java.rmi.Remote接口，并以此接口暴露服务，
+			但如果设置了<dubbo:protocol name="rmi" codec="spring" />，将不生成$Remote接口，而使用Spring的RmiInvocationHandler接口暴露服务，和Spring兼容。 -->
 <!-- 	<dubbo:protocol name="rmi" codec="spring" contextpath="provider"/> -->
 <!-- 	<dubbo:protocol name="rmi" port="1099" contextpath="provider"/> -->
 <!-- 	<dubbo:service interface="com.lx.dubbo.demo.service.IRmiService" ref="rmiService" path="dubbo/dubbo_rmi/rmiService"/> -->
+	
 	
 	<!-- 提供方 采用 HTTP 协议发布远程接口服务（采用Spring的HttpInvoker实现） -->
 <!-- 	<dubbo:protocol name="http" port="8080" contextpath="provider" server="servlet"/> -->
@@ -49,9 +53,9 @@
 	<!-- 用webservice协议在8080端口暴露服务（传输协议：HTTP）;
 		启动 dubbo webservice 服务 提供者 后，可通过浏览器直接访问：http://localhost:8080/provider/dubbo/dubbo_http/webservice/com.lx.dubbo.demo.service.ICxfWebService?wsdl -->
 <!-- 	<dubbo:protocol name="webservice" port="8080" contextpath="provider" server="servlet" /> -->
-	<dubbo:protocol name="webservice" port="8080" server="servlet" />
+<!-- 	<dubbo:protocol name="webservice" port="8080" server="servlet" /> -->
 	<!-- 声明需要暴露的服务接口 -->
 <!-- 	<dubbo:service interface="com.lx.dubbo.demo.service.ICxfWebService" ref="cxfWebService" path="dubbo/dubbo_http/webservice"/> -->
-	<dubbo:service interface="com.lx.dubbo.demo.service.ICxfWebService" ref="cxfWebService"/>
+<!-- 	<dubbo:service interface="com.lx.dubbo.demo.service.ICxfWebService" ref="cxfWebService"/> -->
 	
 </beans>
